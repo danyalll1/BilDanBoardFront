@@ -1,9 +1,20 @@
-import axios from "axios";
+import {ofetch} from "ofetch";
 
-const axiosInstance = axios.create({
-    baseURL: 'https://wwwnick2690.fvds.ru/api',
-    timeout: 1000,
-    headers: {'Content-Type' : "application/json"}
-})
+class apiService {
 
-export { axiosInstance }
+    constructor() {
+
+    }
+
+    private fetchInstance = ofetch.create({baseURL: 'https://wwwnick2690.fvds.ru/api'})
+    private get<T>(route: string, headers: string){
+        this.fetchInstance(`${route}`, {
+            headers:{
+                ...headers
+            }
+        })
+    }
+
+}
+
+

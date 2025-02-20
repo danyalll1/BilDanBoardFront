@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AuthPage from "@/components/pages/authPage.vue";
-import MainPage from "@/components/pages/mainPage.vue";
-import AccountPage from "@/components/pages/accountPage.vue";
+import { MainPage } from "@/components/pages/mainPage";
+import { AccountPage } from  "@/components/pages/accountPage";
+import { RegistrationPage } from  "@/components/pages/registrationPage";
+import { LoginPage } from  "@/components/pages/loginPage";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,11 +15,25 @@ const router = createRouter({
       }
     },
     {
-      path: '/auth',
-      component: AuthPage,
+      path: '/login',
+      component: LoginPage,
       meta: {
         layout: "clear"
-      }
+      },
+    },
+    {
+      path: '/recover',
+      component: LoginPage,
+      meta: {
+        layout: "clear"
+      },
+    },
+    {
+      path: '/registration',
+      component: RegistrationPage,
+      meta: {
+        layout: "clear"
+      },
     },
     {
       path: '/account',
