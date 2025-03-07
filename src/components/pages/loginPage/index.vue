@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import {ref} from "vue";
+import {Validator } from "@/composables/validator";
+import {useRouter} from "vue-router";
 
+let router = useRouter()
 const authModel = ref<{
   email: string,
   password: string,
@@ -9,11 +12,25 @@ const authModel = ref<{
   password: 'password',
 })
 
+const authFormValidator = ref(new Validator(authModel.value,{
+  email: { required : true, email: true},
+  password: { required: true, minLength: 8 }
+}))
+
 const typeOfPasswordModel = ref<boolean>(true)
 const saveMeModel = ref<boolean>()
 
 function togglePassword(){
   typeOfPasswordModel.value = !typeOfPasswordModel.value
+}
+
+function authorization(){
+  authFormValidator.value.validate()
+  if (!authFormValidator.value.validatorResult.errors){
+    console.log('авторизация прошла успешно')
+
+    router.push('/')
+  }
 }
 </script>
 
@@ -25,17 +42,21 @@ function togglePassword(){
         <v-text-field
           v-model="authModel.email"
           append-inner-icon="mdi-email"
+          @update:modelValue="authFormValidator.validateField('email')"
+          :error-messages="authFormValidator.validatorResult.validatorFields.email"
         />
         <v-text-field
           v-model="authModel.password"
           :type="typeOfPasswordModel ? 'password' : 'text'"
           :append-inner-icon="typeOfPasswordModel ? 'mdi-eye' : 'mdi-eye-closed'"
           @click:appendInner="togglePassword"
+          @update:modelValue="authFormValidator.validateField('password')"
+          :error-messages="authFormValidator.validatorResult.validatorFields.password"
         />
-        <v-checkbox density="compact" label="Запомнить меня"></v-checkbox>
+        <v-checkbox density="compact" label="Запомнить меня"/>
       </div>
       <div class="form__footer">
-        <v-btn class="form__btn">
+        <v-btn @click="authorization" class="form__btn">
           Войти
         </v-btn>
         <div class="form__links">
